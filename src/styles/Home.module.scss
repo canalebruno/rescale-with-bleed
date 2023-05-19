@@ -1,0 +1,25 @@
+.maxContainer {
+  background-color: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  .container {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (min-width: 700px) {
+  .maxContainer {
+    .container {
+      width: 450px;
+    }
+  }
+}
