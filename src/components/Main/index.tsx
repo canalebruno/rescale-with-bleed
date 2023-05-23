@@ -344,7 +344,7 @@ export default function Main() {
         </div>
       </label>
       <label>
-        <span>Trimbox Sizes</span>
+        <span>Trimbox Values</span>
         <div className={styles.resultInputContainer}>
           <TextField
             label="Left & Right"
