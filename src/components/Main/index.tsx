@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import { IconButton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import StandardPaperSelection from "../StandardPaperSelect";
 import SwapDimensionsButton from "../SwapDimensionsButton";
 
@@ -202,7 +202,7 @@ export default function Main() {
 
   return (
     <main className={styles.container}>
-      <h1>Rescaling with Bleed</h1>
+      <h1>Scaling Documents with Bleed</h1>
       <label>
         <span>Current Page Size with Bleed</span>
         <div className={styles.inputContainer}>
@@ -330,15 +330,21 @@ export default function Main() {
           <TextField
             label="Width"
             size="small"
-            type="number"
-            value={formatNumber(rescaleTo.width)}
+            value={
+              currentPageWithBleed.width < currentPageFinishSize.width
+                ? "BLEED SIZE ERROR"
+                : formatNumber(rescaleTo.width)
+            }
             disabled
           />
           <TextField
             label="Height"
             size="small"
-            type="number"
-            value={formatNumber(rescaleTo.height)}
+            value={
+              currentPageWithBleed.height < currentPageFinishSize.height
+                ? "BLEED SIZE ERROR"
+                : formatNumber(rescaleTo.height)
+            }
             disabled
           />
         </div>
@@ -349,15 +355,21 @@ export default function Main() {
           <TextField
             label="Left & Right"
             size="small"
-            type="number"
-            value={formatNumber(trimboxSize.width)}
+            value={
+              currentPageWithBleed.width < currentPageFinishSize.width
+                ? "BLEED SIZE ERROR"
+                : formatNumber(trimboxSize.width)
+            }
             disabled
           />
           <TextField
             label="Top & Bottom"
             size="small"
-            type="number"
-            value={formatNumber(trimboxSize.height)}
+            value={
+              currentPageWithBleed.height < currentPageFinishSize.height
+                ? "BLEED SIZE ERROR"
+                : formatNumber(trimboxSize.height)
+            }
             disabled
           />
         </div>
