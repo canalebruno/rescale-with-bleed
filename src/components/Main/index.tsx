@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { TextField } from "@mui/material";
 import StandardPaperSelection from "../StandardPaperSelect";
+import SwapDimensionsButton from "../SwapDimensionsButton";
 
 export default function Main() {
   const [currentPageWithBleed, setCurrentPageWithBleed] = useState({
@@ -91,10 +92,12 @@ export default function Main() {
 
   useEffect(() => {
     lookForStandardPaper("currentPage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageFinishSize]);
 
   useEffect(() => {
     lookForStandardPaper("newPage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newPageFinishSize]);
 
   function handleSelect(selectOption: string, optionValue: string) {
@@ -125,15 +128,29 @@ export default function Main() {
   function lookForStandardPaper(selector: string) {
     const selectedPaper = standardSizes.find((paper) => {
       if (selector === "currentPage") {
-        return (
-          paper.width === currentPageFinishSize.width &&
-          paper.height === currentPageFinishSize.height
-        );
+        if (currentPageFinishSize.width <= currentPageFinishSize.height) {
+          return (
+            paper.width === currentPageFinishSize.width &&
+            paper.height === currentPageFinishSize.height
+          );
+        } else {
+          return (
+            paper.width === currentPageFinishSize.height &&
+            paper.height === currentPageFinishSize.width
+          );
+        }
       } else {
-        return (
-          paper.width === newPageFinishSize.width &&
-          paper.height === newPageFinishSize.height
-        );
+        if (newPageFinishSize.width <= newPageFinishSize.height) {
+          return (
+            paper.width === newPageFinishSize.width &&
+            paper.height === newPageFinishSize.height
+          );
+        } else {
+          return (
+            paper.width === newPageFinishSize.height &&
+            paper.height === newPageFinishSize.width
+          );
+        }
       }
     });
 
@@ -172,9 +189,22 @@ export default function Main() {
     }
   }
 
+  function formatNumber(number: number) {
+    if (Number.isInteger(number)) {
+      return number.toFixed(0);
+    } else {
+      const stringNumber = number.toFixed(2);
+      if (stringNumber[stringNumber.length - 1] === "0") {
+        return stringNumber.slice(0, -1);
+      } else {
+        return stringNumber;
+      }
+    }
+  }
+
   return (
     <main className={styles.container}>
-      <h1>Rescaling with Bleed</h1>
+      <h1>Scaling Documents with Bleed</h1>
       <label>
         <span>Current Page Size with Bleed</span>
         <div className={styles.inputContainer}>
@@ -202,9 +232,11 @@ export default function Main() {
               })
             }
           />
-          <button onClick={(e) => swapDimensions("currentWithBleed")}>
-            Portrait to Landscape
-          </button>
+          <SwapDimensionsButton
+            height={currentPageWithBleed.height}
+            width={currentPageWithBleed.width}
+            onClick={(e) => swapDimensions("currentWithBleed")}
+          />
         </div>
       </label>
       <label>
@@ -243,9 +275,11 @@ export default function Main() {
               });
             }}
           />
-          <button onClick={(e) => swapDimensions("currentPage")}>
-            Portrait to Landscape
-          </button>
+          <SwapDimensionsButton
+            height={currentPageFinishSize.height}
+            width={currentPageFinishSize.width}
+            onClick={(e) => swapDimensions("currentPage")}
+          />
         </div>
       </label>
       <label>
@@ -284,45 +318,60 @@ export default function Main() {
               });
             }}
           />
-          <button onClick={(e) => swapDimensions("newPage")}>
-            Portrait to Landscape
-          </button>
+          <SwapDimensionsButton
+            height={newPageFinishSize.height}
+            width={newPageFinishSize.width}
+            onClick={(e) => swapDimensions("newPage")}
+          />
         </div>
       </label>
+      <div className={styles.divider} />
       <label>
         <span>Rescale to</span>
         <div className={styles.resultInputContainer}>
           <TextField
             label="Width"
             size="small"
-            type="number"
-            value={rescaleTo.width.toFixed(2)}
+            value={
+              currentPageWithBleed.width < currentPageFinishSize.width
+                ? "BLEED SIZE ERROR"
+                : formatNumber(rescaleTo.width)
+            }
             disabled
           />
           <TextField
             label="Height"
             size="small"
-            type="number"
-            value={rescaleTo.height.toFixed(2)}
+            value={
+              currentPageWithBleed.height < currentPageFinishSize.height
+                ? "BLEED SIZE ERROR"
+                : formatNumber(rescaleTo.height)
+            }
             disabled
           />
         </div>
       </label>
       <label>
-        <span>Trimbox Sizes</span>
+        <span>Trimbox Values</span>
         <div className={styles.resultInputContainer}>
           <TextField
             label="Left & Right"
             size="small"
-            type="number"
-            value={trimboxSize.width.toFixed(2)}
+            value={
+              currentPageWithBleed.width < currentPageFinishSize.width
+                ? "BLEED SIZE ERROR"
+                : formatNumber(trimboxSize.width)
+            }
             disabled
           />
           <TextField
             label="Top & Bottom"
             size="small"
-            type="number"
-            value={trimboxSize.height.toFixed(2)}
+            value={
+              currentPageWithBleed.height < currentPageFinishSize.height
+                ? "BLEED SIZE ERROR"
+                : formatNumber(trimboxSize.height)
+            }
             disabled
           />
         </div>

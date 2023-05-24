@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Rescaling with Bleed Calculator</title>
+        <title>Scaling Documents with Bleed | Calculator</title>
       </Head>
       <Component {...pageProps} />;
     </>
