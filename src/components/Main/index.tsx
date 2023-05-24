@@ -92,10 +92,12 @@ export default function Main() {
 
   useEffect(() => {
     lookForStandardPaper("currentPage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageFinishSize]);
 
   useEffect(() => {
     lookForStandardPaper("newPage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newPageFinishSize]);
 
   function handleSelect(selectOption: string, optionValue: string) {
